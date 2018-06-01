@@ -34,7 +34,9 @@ class Payment extends Component {
       .then(data => data.json())
       .then(response => {
         const pound = response.rates.GBP;
-        this.setState({ amount: (this.state.input * pound).toFixed(2) });
+        this.setState({
+          amount: (this.state.input * pound).toFixed(2)
+        });
       });
   };
 
