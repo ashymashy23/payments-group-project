@@ -11,16 +11,26 @@ class App extends Component {
     super();
     this.state = {
       currencies: currencies,
-      balance: 87.43, // This is the current balance in GBP
+      balance: this.totalAmount(payments),
       paymentsData: payments
-    };
+    }; // This is the current balance in GBP
   }
+
+  totalAmount = payments => {
+    let sumAmount = 0;
+    for (let i = 0; i < payments.length; i++) {
+      sumAmount += payments[i].amount;
+    }
+    return sumAmount;
+  };
 
   updateData = payment => {
     const updatedData = this.state.paymentsData;
     updatedData.push(payment);
+    console.log(updatedData);
     this.setState({
-      paymentsData: updatedData
+      paymentsData: updatedData,
+      balance: this.totalAmount(updatedData)
     });
   };
 

@@ -61,7 +61,7 @@ class Payment extends Component {
     const newPayment = {
       date: this.getTodaysDate(),
       currency: this.state.selectedCurrency,
-      amount: this.state.input,
+      amount: Number(this.state.input),
       description: "",
       status: "Completed"
     };
