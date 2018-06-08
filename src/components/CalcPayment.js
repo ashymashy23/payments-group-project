@@ -40,6 +40,34 @@ class Payment extends Component {
       });
   };
 
+  getTodaysDate = () => {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+
+    return yyyy + "-" + mm + "-" + dd;
+  };
+
+  makePayment = () => {
+    const newPayment = {
+      date: this.getTodaysDate(),
+      currency: this.state.selectedCurrency,
+      amount: this.state.input,
+      description: "",
+      status: "Completed"
+    };
+    this.props.updateData(newPayment);
+  };
+
   render() {
     return (
       <div className="CalcPayment">
@@ -64,6 +92,7 @@ class Payment extends Component {
           GBP.
           <div className="CalcPayment-calculate">
             <Button onClick={this.onClickHandlingButton}>Calculate</Button>
+            <Button onClick={this.makePayment}>Make Payment</Button>
           </div>
         </div>
       </div>

@@ -4,15 +4,25 @@ import CalcPayment from "./components/CalcPayment";
 import Payments from "./components/Payments";
 import currencies from "./data/currencies";
 import "./App.css";
+import payments from "./data/payments";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       currencies: currencies,
-      balance: 87.43 // This is the current balance in GBP
+      balance: 87.43, // This is the current balance in GBP
+      paymentsData: payments
     };
   }
+
+  updateData = payment => {
+    const updatedData = this.state.paymentsData;
+    updatedData.push(payment);
+    this.setState({
+      paymentsData: updatedData
+    });
+  };
 
   render() {
     return (
@@ -24,9 +34,12 @@ class App extends Component {
           total={this.state.balance}
           currencies={this.state.currencies}
         />
-        <CalcPayment currencies={this.state.currencies} />
+        <CalcPayment
+          currencies={this.state.currencies}
+          updateData={this.updateData}
+        />
         <h2>Payments</h2>
-        <Payments />
+        <Payments paymentsData={this.state.paymentsData} />
       </div>
     );
   }

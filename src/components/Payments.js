@@ -1,10 +1,10 @@
-import React from 'react';
-import Button from '../components/Button';
-import './Payments.css';
+import React from "react";
+import Button from "../components/Button";
+import "./Payments.css";
 import payments from "../data/payments";
 
 function Payments(props) {
-  const paymentData = payments.map(payment => {
+  const paymentData = props.paymentsData.map(payment => {
     return (
       <tr>
         <td>{payment.date}</td>
