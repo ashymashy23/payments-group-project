@@ -63,9 +63,9 @@ class Payment extends Component {
       currency: this.state.selectedCurrency,
       amount: Number(this.state.input),
       description: "",
-      status: "Completed"
+      status: "Complete"
     };
-    this.props.updateData(newPayment);
+    this.props.updatePaymentData(newPayment);
   };
 
   render() {
@@ -92,6 +92,7 @@ class Payment extends Component {
           GBP.
           <div className="CalcPayment-calculate">
             <Button onClick={this.onClickHandlingButton}>Calculate</Button>
+
             <Button onClick={this.makePayment}>Make Payment</Button>
           </div>
         </div>

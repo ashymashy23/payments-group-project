@@ -11,26 +11,46 @@ class App extends Component {
     super();
     this.state = {
       currencies: currencies,
-      balance: this.totalAmount(payments),
+      balance: this.totalAmount(payments).toFixed(2),
       paymentsData: payments
     }; // This is the current balance in GBP
   }
 
+  // convertInGBP = (amount, currency) => {
+  //   fetch("https://exchangeratesapi.io/api/latest?base=" + currency)
+  //     .then(data => data.json())
+  //     .then(response => {
+  //       const pound = response.rates.GBP;
+
+  //       amountInGBP = amount * pound;
+        
+  //       this.setState({
+  //         amountInGBP: this.state.amount 
+  //       });
+  //     });
+  // };
+
   totalAmount = payments => {
     let sumAmount = 0;
     for (let i = 0; i < payments.length; i++) {
+      // const amount = payments[i].amount;
+      // const currency = payments[i].currency;
+
+      // const amountInGBP = this.convertInGBP(amount, currency);
+      // sumAmount += amountInGBP;
+
       sumAmount += payments[i].amount;
     }
     return sumAmount;
   };
 
-  updateData = payment => {
+  updatePaymentData = payment => {
     const updatedData = this.state.paymentsData;
     updatedData.push(payment);
-    console.log(updatedData);
+    // console.log(updatedData);
     this.setState({
       paymentsData: updatedData,
-      balance: this.totalAmount(updatedData)
+      balance: this.totalAmount(updatedData).toFixed(2)
     });
   };
 
@@ -46,7 +66,7 @@ class App extends Component {
         />
         <CalcPayment
           currencies={this.state.currencies}
-          updateData={this.updateData}
+          updatePaymentData={this.updatePaymentData}
         />
         <h2>Payments</h2>
         <Payments paymentsData={this.state.paymentsData} />
