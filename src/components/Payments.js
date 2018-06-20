@@ -1,6 +1,6 @@
-import React from 'react';
-import Button from '../components/Button';
-import './Payments.css';
+import React from "react";
+import Button from "../components/Button";
+import "./Payments.css";
 import payments from "../data/payments";
 
 function Payments(props) {
@@ -33,7 +33,7 @@ function Payments(props) {
         <tr>
           <td />
           <td />
-          <td>???</td>
+          <td>{props.total.toFixed(2)}</td>
           <td>Total (GBP)</td>
           <td />
           <td />
