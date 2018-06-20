@@ -11,27 +11,25 @@ class App extends Component {
     super();
     this.state = {
       currencies: currencies,
-      balance: this.totalAmount(payments).toFixed(2),
+      balance: 87.34,
       paymentsData: payments
     }; // This is the current balance in GBP
   }
 
-  // convertInGBP = (amount, currency) => {
-  //   fetch("https://exchangeratesapi.io/api/latest?base=" + currency)
-  //     .then(data => data.json())
-  //     .then(response => {
-  //       const pound = response.rates.GBP;
+  convertInGBP = (amount, currency) => {
+    fetch("https://exchangeratesapi.io/api/latest?base=" + currency)
+      .then(data => data.json())
+      .then(response => {
+        const pound = response.rates.GBP;
+        this.setState({
+          paymentsData: this.state.payments.amount * pound
+        });
 
-  //       amountInGBP = amount * pound;
-        
-  //       this.setState({
-  //         amountInGBP: this.state.amount 
-  //       });
-  //     });
-  // };
+      });
+  };
 
   totalAmount = payments => {
-    let sumAmount = 0;
+    let sumAmount = this.state.balance;
     for (let i = 0; i < payments.length; i++) {
       // const amount = payments[i].amount;
       // const currency = payments[i].currency;
