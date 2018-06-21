@@ -25,6 +25,7 @@ class Payment extends Component {
       input: inputAmount
     });
   };
+
   onClickHandlingButton = () => {
     // const currency = this.state.selectedCurrency;
     fetch(
@@ -36,6 +37,34 @@ class Payment extends Component {
         const pound = response.rates.GBP;
         this.setState({ amount: (this.state.input * pound).toFixed(2) });
       });
+  };
+
+  makePayment = () => {
+    const newPayment = {
+      date: this.getTodaysDate(),
+      currency: this.state.selectedCurrency,
+      amount: Number(this.state.input),
+      description: "",
+      status: "Pending"
+    };
+    this.props.updatePaymentData(newPayment);
+  };
+
+  getTodaysDate = () => {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+
+    return yyyy + "-" + mm + "-" + dd;
   };
 
   render() {
@@ -62,6 +91,7 @@ class Payment extends Component {
           GBP.
           <div className="CalcPayment-calculate">
             <Button onClick={this.onClickHandlingButton}>Calculate</Button>
+            <Button onClick={this.makePayment}>Make Payment</Button>
           </div>
         </div>
       </div>
