@@ -48,6 +48,7 @@ class Payment extends Component {
       status: "Pending"
     };
     this.props.updatePaymentData(newPayment);
+    this.props.updateAccountBalance(newPayment);
   };
 
   getTodaysDate = () => {

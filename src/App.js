@@ -11,6 +11,7 @@ class App extends Component {
     super();
     console.log("Constructor");
     this.state = {
+      totalBalanceInAlternateCurrency: 0,
       currencies: currencies,
       balance: 87.43,
       total: 0,
@@ -23,9 +24,22 @@ class App extends Component {
   updatePaymentData = payment => {
     const updatedData = this.state.pendingPayments;
     updatedData.push(payment);
-    // console.log(updatedData);
-    this.setState({ pendingPayments: updatedData, totalPending: 0 });
+     this.setState({ pendingPayments: updatedData, totalPending: 0 });
     this.calculatePendingTotal();
+  };
+
+  changingCurrencyToGBPcurrency(payment) {
+     fetch("https://exchangeratesapi.io/api/latest?base=" + payment.currency)
+      .then(data => data.json())
+      .then(response => {
+        const pound = response.rates.GBP;
+        let amount = payment.amount;
+        amount = (pound * amount).toFixed(2);
+        this.setState({ balance: (this.state.balance - amount).toFixed(2) });
+      });
+  }
+  updateAccountBalance = payment => {
+    this.changingCurrencyToGBPcurrency(payment);
   };
 
   calculateTotal = () => {
@@ -58,7 +72,7 @@ class App extends Component {
           const pound = response.rates.GBP;
           const sum = this.state.pendingPayments[i].amount * pound;
           this.setState({
-            totalPending: this.state.totalPending + sum,
+            totalPending: this.state.totalPending + sum
           });
         });
     }
@@ -103,10 +117,12 @@ class App extends Component {
         <Balance
           total={this.state.balance}
           currencies={this.state.currencies}
+          updateAccountBalance={this.updateAccountBalance}
         />
         <CalcPayment
           currencies={this.state.currencies}
           updatePaymentData={this.updatePaymentData}
+          updateAccountBalance={this.updateAccountBalance}
         />
         <h2>Payments</h2>
         <Payments
