@@ -8,7 +8,8 @@ class Payment extends Component {
     this.state = {
       selectedCurrency: "USD",
       amount: 0,
-      input: 0
+      input: 0,
+      errorMsg: null
     };
   }
 
@@ -27,28 +28,46 @@ class Payment extends Component {
   };
 
   onClickHandlingButton = () => {
-    // const currency = this.state.selectedCurrency;
-    fetch(
-      "https://exchangeratesapi.io/api/latest?base=" +
-        this.state.selectedCurrency
-    )
-      .then(data => data.json())
-      .then(response => {
-        const pound = response.rates.GBP;
-        this.setState({ amount: (this.state.input * pound).toFixed(2) });
+    this.setState({
+      errorMsg: ""
+    });
+    if (this.state.input > 0) {
+      // const currency = this.state.selectedCurrency;
+      fetch(
+        "https://exchangeratesapi.io/api/latest?base=" +
+          this.state.selectedCurrency
+      )
+        .then(data => data.json())
+        .then(response => {
+          const pound = response.rates.GBP;
+          this.setState({
+            amount: (this.state.input * pound).toFixed(2)
+          });
+        });
+    } else {
+      this.setState({
+        errorMsg: "Please Enter a valid value"
       });
+    }
   };
 
   makePayment = () => {
-    const newPayment = {
-      date: this.getTodaysDate(),
-      currency: this.state.selectedCurrency,
-      amount: Number(this.state.input),
-      description: "",
-      status: "Pending"
-    };
-    this.props.updatePaymentData(newPayment);
-    this.props.updateAccountBalance(newPayment);
+    if (this.state.input > 0) {
+      this.setState({ errorMsg: null });
+      const newPayment = {
+        date: this.getTodaysDate(),
+        currency: this.state.selectedCurrency,
+        amount: Number(this.state.input),
+        description: "",
+        status: "Pending"
+      };
+      this.props.updatePaymentData(newPayment);
+      this.props.updateAccountBalance(newPayment);
+    } else {
+      this.setState({
+        errorMsg: "Please Enter a valid value"
+      });
+    }
   };
 
   getTodaysDate = () => {
@@ -93,6 +112,8 @@ class Payment extends Component {
           <div className="CalcPayment-calculate">
             <Button onClick={this.onClickHandlingButton}>Calculate</Button>
             <Button onClick={this.makePayment}>Make Payment</Button>
+
+            {this.state.errorMsg ? this.state.errorMsg : null}
           </div>
         </div>
       </div>
