@@ -58,7 +58,7 @@ class App extends Component {
           const pound = response.rates.GBP;
           const sum = this.state.pendingPayments[i].amount * pound;
           this.setState({
-            totalPending: this.state.totalPending + sum
+            totalPending: this.state.totalPending + sum,
           });
         });
     }
@@ -70,13 +70,28 @@ class App extends Component {
     console.log("Did mount!");
   }
 
-  // cancelPending = index => {
-  //   const pendingPayments = this.state.pendingPayments;
-  //   const updatePendingTotal= this.state.totalPending;
-  
-  //   pendingPayments.splice(index, 1);
-  //   this.setState({ pendingPayments: pendingPayments });
-  // };
+  updateTotalAndBalance = (currency, amount) => {
+    fetch(`https://exchangeratesapi.io/api/latest?base=${currency}`)
+      .then(response => response.json())
+      .then(data => {
+        let pound = data.rates.GBP;
+        this.setState({
+          balance: this.state.balance + pound * amount,
+          totalPending: this.state.totalPending - pound * amount
+        });
+      });
+  };
+
+  cancelPending = index => {
+    const pendingPayments = this.state.pendingPayments;
+    //const updatePendingTotal= this.state.totalPending;
+    this.updateTotalAndBalance(
+      pendingPayments[index].currency,
+      pendingPayments[index].amount
+    );
+    pendingPayments.splice(index, 1);
+    this.setState({ pendingPayments: pendingPayments });
+  };
 
   render() {
     return (
@@ -101,6 +116,7 @@ class App extends Component {
         <Payments
           paymentsData={this.state.pendingPayments}
           total={this.state.totalPending}
+          cancelPending={this.cancelPending}
         />
       </div>
     );

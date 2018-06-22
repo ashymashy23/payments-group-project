@@ -14,7 +14,7 @@ class Balance extends Component {
 			<div className="Balance">
 				<h2 className="Balance-title">
 					Your account balance is
-					<span className="Balance-total">£{this.props.total}</span>
+					<span className="Balance-total">£{this.props.total.toFixed(2)}</span>
 				</h2>
 				<div className="Balance-alt">
 					Your balance is ??? in

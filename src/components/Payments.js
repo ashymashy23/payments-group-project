@@ -4,18 +4,6 @@ import "./Payments.css";
 import payments from "../data/payments";
 
 function Payments(props) {
-  const paymentData = props.paymentsData.map(payment => {
-    return (
-      <tr>
-        <td>{payment.date}</td>
-        <td>{payment.currency}</td>
-        <td>{payment.amount}</td>
-        <td className="Payments-description">{payment.description}</td>
-        <td>{payment.status}</td>
-        <td>{payment.action}</td>
-      </tr>
-    );
-  });
   return (
     <table className="Payments">
       <thead>
@@ -28,7 +16,20 @@ function Payments(props) {
           <th>Action</th>
         </tr>
       </thead>
-      <tbody>{paymentData}</tbody>
+      <tbody>
+        {props.paymentsData.map((payment, index) => {
+          return (
+            <tr key={index}>
+              <td>{payment.date}</td>
+              <td>{payment.currency}</td>
+              <td>{payment.amount}</td>
+              <td className="Payments-description">{payment.description}</td>
+              <td>{payment.status}</td>
+              <td>{payment.status === "Pending" ? <Button onClick={() => props.cancelPending(index)}>Cancel</Button> : ""}</td>
+            </tr>
+          );
+        })}
+      </tbody>
       <tfoot>
         <tr>
           <td />
