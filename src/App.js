@@ -24,12 +24,12 @@ class App extends Component {
   updatePaymentData = payment => {
     const updatedData = this.state.pendingPayments;
     updatedData.push(payment);
-     this.setState({ pendingPayments: updatedData, totalPending: 0 });
+    this.setState({ pendingPayments: updatedData, totalPending: 0 });
     this.calculatePendingTotal();
   };
 
   changingCurrencyToGBPcurrency(payment) {
-     fetch("https://exchangeratesapi.io/api/latest?base=" + payment.currency)
+    fetch("https://exchangeratesapi.io/api/latest?base=" + payment.currency)
       .then(data => data.json())
       .then(response => {
         const pound = response.rates.GBP;
@@ -38,6 +38,20 @@ class App extends Component {
         this.setState({ balance: (this.state.balance - amount).toFixed(2) });
       });
   }
+
+  undoCurrencyToGBPcurrency(payment) {
+    fetch("https://exchangeratesapi.io/api/latest?base=" + payment.currency)
+      .then(data => data.json())
+      .then(response => {
+        const pound = response.rates.GBP;
+        let amount = payment.amount;
+        amount = pound * amount;
+        let newBalance = parseFloat(this.state.balance) + parseFloat(amount);
+        // newBalance = newBalance.toFixed(2);
+        this.setState({ balance: newBalance });
+      });
+  }
+
   updateAccountBalance = payment => {
     this.changingCurrencyToGBPcurrency(payment);
   };
@@ -96,7 +110,7 @@ class App extends Component {
       });
   };
 
-  cancelPending = index => {
+  cancelPending = (index, payment) => {
     const pendingPayments = this.state.pendingPayments;
     //const updatePendingTotal= this.state.totalPending;
     this.updateTotalAndBalance(
@@ -105,6 +119,8 @@ class App extends Component {
     );
     pendingPayments.splice(index, 1);
     this.setState({ pendingPayments: pendingPayments });
+
+    this.undoCurrencyToGBPcurrency(payment);
   };
 
   render() {

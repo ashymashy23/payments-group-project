@@ -25,7 +25,15 @@ function Payments(props) {
               <td>{payment.amount}</td>
               <td className="Payments-description">{payment.description}</td>
               <td>{payment.status}</td>
-              <td>{payment.status === "Pending" ? <Button onClick={() => props.cancelPending(index)}>Cancel</Button> : ""}</td>
+              <td>
+                {payment.status === "Pending" ? (
+                  <Button onClick={() => props.cancelPending(index, payment)}>
+                    Cancel
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </td>
             </tr>
           );
         })}
