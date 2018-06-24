@@ -4,15 +4,53 @@ import CalcPayment from "./components/CalcPayment";
 import Payments from "./components/Payments";
 import currencies from "./data/currencies";
 import "./App.css";
+import payments from "./data/payments";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       currencies: currencies,
-      balance: 87.43 // This is the current balance in GBP
-    };
+      balance: 87.34,
+      paymentsData: payments
+    }; // This is the current balance in GBP
   }
+
+  convertInGBP = (amount, currency) => {
+    fetch("https://exchangeratesapi.io/api/latest?base=" + currency)
+      .then(data => data.json())
+      .then(response => {
+        const pound = response.rates.GBP;
+        this.setState({
+          paymentsData: this.state.payments.amount * pound
+        });
+
+      });
+  };
+
+  totalAmount = payments => {
+    let sumAmount = this.state.balance;
+    for (let i = 0; i < payments.length; i++) {
+      // const amount = payments[i].amount;
+      // const currency = payments[i].currency;
+
+      // const amountInGBP = this.convertInGBP(amount, currency);
+      // sumAmount += amountInGBP;
+
+      sumAmount += payments[i].amount;
+    }
+    return sumAmount;
+  };
+
+  updatePaymentData = payment => {
+    const updatedData = this.state.paymentsData;
+    updatedData.push(payment);
+    // console.log(updatedData);
+    this.setState({
+      paymentsData: updatedData,
+      balance: this.totalAmount(updatedData).toFixed(2)
+    });
+  };
 
   render() {
     return (
@@ -24,9 +62,12 @@ class App extends Component {
           total={this.state.balance}
           currencies={this.state.currencies}
         />
-        <CalcPayment currencies={this.state.currencies} />
+        <CalcPayment
+          currencies={this.state.currencies}
+          updatePaymentData={this.updatePaymentData}
+        />
         <h2>Payments</h2>
-        <Payments />
+        <Payments paymentsData={this.state.paymentsData} />
       </div>
     );
   }
