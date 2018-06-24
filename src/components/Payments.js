@@ -3,8 +3,7 @@ import Button from "../components/Button";
 import "./Payments.css";
 import payments from "../data/payments";
 
-function Payments(props) {
-  const paymentData = props.paymentsData.map(payment => {
+  const paymentData = payments.map(payment => {
     return (
       <tr>
         <td>{payment.date}</td>

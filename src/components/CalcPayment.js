@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Button from "./Button";
 import "./CalcPayment.css";
 
-class Payment extends Component {
+class CalcPayment extends Component {
   constructor() {
     super();
     this.state = {
@@ -39,7 +39,6 @@ class Payment extends Component {
         });
       });
   };
-
   getTodaysDate = () => {
     var today = new Date();
     var dd = today.getDate();
@@ -101,4 +100,4 @@ class Payment extends Component {
   }
 }
 
-export default Payment;
+export default CalcPayment;
