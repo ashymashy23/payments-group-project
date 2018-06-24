@@ -8,7 +8,7 @@ class Payment extends Component {
     this.state = {
       selectedCurrency: "USD",
       amount: 0,
-      input: 0
+      input: 0,
     };
   }
 
@@ -26,7 +26,7 @@ class Payment extends Component {
     });
   };
 
-  onClickHandlingButton = () => {
+  changingAlternateCurrencyToGBP = () => {
     // const currency = this.state.selectedCurrency;
     fetch(
       "https://exchangeratesapi.io/api/latest?base=" +
@@ -91,7 +91,7 @@ class Payment extends Component {
           <span className="CalcPayment-result">{this.state.amount}</span> in
           GBP.
           <div className="CalcPayment-calculate">
-            <Button onClick={this.onClickHandlingButton}>Calculate</Button>
+            <Button onClick={this.changingAlternateCurrencyToGBP}>Calculate</Button>
             <Button onClick={this.makePayment}>Make Payment</Button>
           </div>
         </div>

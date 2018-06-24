@@ -29,32 +29,27 @@ class Balance extends Component {
       });
   }
 
-  convertToAnotherCurrency = event => {
+  convertGBPToOtherCurrency = event => {
     const currency = event.target.value;
     this.setState({ alternateCurrency: currency });
     this.componentDidMount();
   };
 
   render() {
-    return (
-      <div className="Balance">
+    return <div className="Balance">
         <h2 className="Balance-title">
           Your account balance is
           <span className="Balance-total">£{this.props.total}</span>
         </h2>
         <div className="Balance-alt">
           Your balance is {this.state.totalBalanceInAlternateCurrency} in
-          <select
-            defaultValue={this.state.alternateCurrency}
-            onChange={this.convertToAnotherCurrency}
-          >
+          <select defaultValue={this.state.alternateCurrency} onChange={this.convertGBPToOtherCurrency}>
             {this.props.currencies.map((currency, index) => (
               <option key={index}>{currency}</option>
             ))}
           </select>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 
