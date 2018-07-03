@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Button from "./Button";
 import "./CalcPayment.css";
+import convertAmount from "../helpers/CurrencyConverter"
 
 class Payment extends Component {
   constructor() {
@@ -27,10 +28,10 @@ class Payment extends Component {
     });
   };
 
-  onClickHandlingButton = () => {
-    this.setState({
-      errorMsg: ""
-    });
+  calculateHandleButton = () => {
+    // this.setState({
+    //   errorMsg: ""
+    // });
     if (this.state.input > 0) {
       // const currency = this.state.selectedCurrency;
       fetch(
@@ -39,9 +40,9 @@ class Payment extends Component {
       )
         .then(data => data.json())
         .then(response => {
-          const pound = response.rates.GBP;
+          const poundExchangeRate = response.rates.GBP;
           this.setState({
-            amount: (this.state.input * pound).toFixed(2)
+            amount: (this.state.input * poundExchangeRate).toFixed(2)
           });
         });
     } else {
@@ -52,21 +53,20 @@ class Payment extends Component {
   };
 
   makePayment = () => {
-    if (this.state.input > 0) {
+    const newPayment = {
+      date: this.getTodaysDate(),
+      currency: this.state.selectedCurrency,
+      amount: Number(this.state.input),
+      description: "",
+      status: "Pending"
+    };
+
+    if (this.state.input > 0 ) {
       this.setState({ errorMsg: null });
-      const newPayment = {
-        date: this.getTodaysDate(),
-        currency: this.state.selectedCurrency,
-        amount: Number(this.state.input),
-        description: "",
-        status: "Pending"
-      };
       this.props.updatePaymentData(newPayment);
       this.props.updateAccountBalance(newPayment);
     } else {
-      this.setState({
-        errorMsg: "Please Enter a valid value"
-      });
+      this.setState({ errorMsg: "Please Enter a valid value" });
     }
   };
 
@@ -110,7 +110,7 @@ class Payment extends Component {
           <span className="CalcPayment-result">{this.state.amount}</span> in
           GBP.
           <div className="CalcPayment-calculate">
-            <Button onClick={this.onClickHandlingButton}>Calculate</Button>
+            <Button onClick={this.calculateHandleButton}>Calculate</Button>
             <Button onClick={this.makePayment}>Make Payment</Button>
 
             {this.state.errorMsg ? this.state.errorMsg : null}

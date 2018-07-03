@@ -4,8 +4,7 @@ import "./Payments.css";
 import payments from "../data/payments";
 
 function Payments(props) {
-  return (
-    <table className="Payments">
+  return <table className="Payments">
       <thead>
         <tr>
           <th>Date</th>
@@ -17,17 +16,23 @@ function Payments(props) {
         </tr>
       </thead>
       <tbody>
-        {props.paymentsData.map((payment, index) => {
-          return (
-            <tr key={index}>
+        {props.completePayments.map((payment, index) => {
+          return <tr key={index}>
               <td>{payment.date}</td>
               <td>{payment.currency}</td>
               <td>{payment.amount}</td>
               <td className="Payments-description">{payment.description}</td>
               <td>{payment.status}</td>
-              <td>{payment.status === "Pending" ? <Button onClick={() => props.cancelPending(index)}>Cancel</Button> : ""}</td>
-            </tr>
-          );
+              <td>
+                {payment.status === "Pending" ? (
+                  <Button onClick={() => props.cancelPending(index)}>
+                    Cancel
+                  </Button>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>;
         })}
       </tbody>
       <tfoot>
@@ -40,8 +45,7 @@ function Payments(props) {
           <td />
         </tr>
       </tfoot>
-    </table>
-  );
+    </table>;
 }
 
 export default Payments;
