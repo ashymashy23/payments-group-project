@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Button from "./Button";
 import "./CalcPayment.css";
-import convertAmount from "../helpers/CurrencyConverter"
+import convertAmount from "../helpers/CurrencyConverter";
 
 class Payment extends Component {
   constructor() {
@@ -52,6 +52,17 @@ class Payment extends Component {
     }
   };
 
+  completeTransaction = newPayment => {
+    console.log(newPayment);
+    if (newPayment.amount >= this.state.balance) {
+      return false;
+    } else {
+      this.updatePaymentData(newPayment);
+      this.updateAccountBalance(newPayment);
+      return true;
+    }
+  };
+
   makePayment = () => {
     const newPayment = {
       date: this.getTodaysDate(),
@@ -60,14 +71,19 @@ class Payment extends Component {
       description: "",
       status: "Pending"
     };
-
-    if (this.state.input > 0 ) {
-      this.setState({ errorMsg: null });
-      this.props.updatePaymentData(newPayment);
-      this.props.updateAccountBalance(newPayment);
-    } else {
-      this.setState({ errorMsg: "Please Enter a valid value" });
-    }
+    convertAmount(newPayment.amount, newPayment.currency, "GBP").then(
+      amountInGBP => {
+        if (amountInGBP >= this.props.balance) {
+          console.log("hello");
+          this.setState({ errorMsg: "You don't have enough balance" });
+        } else if (this.state.input > 0) {
+          this.setState({ errorMsg: null });
+          this.props.completeTransaction(newPayment);
+        } else {
+          this.setState({ errorMsg: "Please Enter a valid value" });
+        }
+      }
+    );
   };
 
   getTodaysDate = () => {

@@ -26,7 +26,7 @@ class Balance extends Component {
         const exchangeRate = response.rates[this.state.alternateCurrency];
         // const totalBalance = this.props.total;
         this.setState({
-          balanceInAlternateCurrency: (this.props.total * exchangeRate).toFixed(
+          balanceInAlternateCurrency: (this.props.balance * exchangeRate).toFixed(
             2
           )
         });
@@ -40,25 +40,20 @@ class Balance extends Component {
   };
 
   render() {
-    return (
-      <div className="Balance">
+    return <div className="Balance">
         <h2 className="Balance-title">
           Your account balance is
-          <span className="Balance-total">£{this.props.total}</span>
+          <span className="Balance-total">£{this.props.balance}</span>
         </h2>
         <div className="Balance-alt">
           Your balance is {this.state.balanceInAlternateCurrency} in
-          <select
-            defaultValue={this.state.alternateCurrency}
-            onChange={this.convertToAnotherCurrency}
-          >
+          <select defaultValue={this.state.alternateCurrency} onChange={this.convertToAnotherCurrency}>
             {this.props.currencies.map((currency, index) => (
               <option key={index}>{currency}</option>
             ))}
           </select>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 

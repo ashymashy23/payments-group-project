@@ -79,7 +79,7 @@ class App extends Component {
       }
     );
   };
-  
+
   calculateCompleteTotal = () => {
     for (let i = 0; i < this.state.completePayments.length; i++) {
       //console.log(this.state.payments);
@@ -124,6 +124,11 @@ class App extends Component {
     console.log("Did mount!");
   }
 
+  completeTransaction = (newPayment) => {
+      this.updatePaymentData(newPayment);
+      this.updateAccountBalance(newPayment);   
+  }
+
   updateTotalAndBalance = (currency, amount, transactionDate = "latest") => {
     fetch(`https://exchangeratesapi.io/api/${transactionDate}?base=${currency}`)
       .then(response => response.json())
@@ -161,14 +166,13 @@ class App extends Component {
           <h1 className="App-title">Payments</h1>
         </header>
         <Balance
-          total={this.state.balance}
+          balance={this.state.balance}
           currencies={this.state.currencies}
-          // updateAccountBalance={this.updateAccountBalance}
         />
         <CalcPayment
           currencies={this.state.currencies}
-          updatePaymentData={this.updatePaymentData}
-          updateAccountBalance={this.updateAccountBalance}
+          completeTransaction={this.completeTransaction}
+          balance={this.state.balance}
         />
         <h2>Payments</h2>
         <Payments
